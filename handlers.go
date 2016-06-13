@@ -5,6 +5,7 @@ import (
 	"html"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -14,7 +15,22 @@ func Index(w http.ResponseWriter, r *http.Request) {
 func PostWebhook(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	log.Printf("Posted Form Data: %v", r.Form)
-	fmt.Fprintf(w, "POST Received")
+
+	// is this a fail?
+	failValue := r.PostFormValue("fail")
+	if failValue != "" {
+		// force fail to happen
+		log.Printf("forcing a fail: %s", failValue)
+		responseCode, err := strconv.Atoi(failValue)
+		if err != nil {
+			// couldn't decode response code so use a default
+			responseCode = 500
+		}
+		http.Error(w, "forcing an error", responseCode)
+	} else {
+		// otherwise success
+		fmt.Fprintf(w, "POST Received")
+	}
 }
 
 func GetWebhook(w http.ResponseWriter, r *http.Request) {
