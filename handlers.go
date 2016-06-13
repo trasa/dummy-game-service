@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"html"
+	"log"
 	"net/http"
 )
 
