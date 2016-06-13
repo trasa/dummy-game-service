@@ -1,7 +1,11 @@
-# Wallet-Service
+# Dummy Game Service
 
-Simple web service for storing and retrieving currency values.
+Simple web service for ... well, nothing, actually.
 
-Note that this doesn't actually do anything yet; I just needed
-some static websites to make requests against to test some other stuff.
+This is put together to handle incoming webhook requests from other
+services. It basically just receives the request and responds
+200 OK. Or maybe an error, if that's what you configured it to do.
+
+Other than logging everything to the console, that's about it.
+
 

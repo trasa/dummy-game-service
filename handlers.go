@@ -1,9 +1,9 @@
 package main
 
 import (
-	"encoding/json"
+	//"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
+	//"github.com/gorilla/mux"
 	"html"
 	"net/http"
 )
@@ -12,6 +12,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "you are at %q", html.EscapeString(r.URL.Path))
 }
 
+/*
 func GetWallets(w http.ResponseWriter, r *http.Request) {
 	wallets := Wallets{
 		Wallet{CurrencyType: "gold", Amount: 123},
@@ -35,3 +36,4 @@ func WalletCurrency(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 }
+*/

@@ -19,6 +19,7 @@ var routes = Routes{
 		"/",
 		Index,
 	},
+	/*
 	Route{
 		"Wallets",
 		"GET",
@@ -31,4 +32,5 @@ var routes = Routes{
 		"/wallets/{currencyType}",
 		WalletCurrency,
 	},
+	*/
 }
