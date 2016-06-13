@@ -19,18 +19,16 @@ var routes = Routes{
 		"/",
 		Index,
 	},
-	/*
 	Route{
-		"Wallets",
-		"GET",
-		"/wallets",
-		GetWallets,
+		"PostWebhook",
+		"POST",
+		"/webhook",
+		PostWebhook,
 	},
 	Route{
-		"WalletCurrency",
+		"GetWebhook",
 		"GET",
-		"/wallets/{currencyType}",
-		WalletCurrency,
+		"/webhook",
+		GetWebhook,
 	},
-	*/
 }
