@@ -8,4 +8,12 @@ services. It basically just receives the request and responds
 
 Other than logging everything to the console, that's about it.
 
+## Building and Deploying
 
+To create the docker container for fake service, see ```docker_build.sh``` which basically just runs
+
+```
+docker build -t registry.wargaming.net/freya/dummy-game-service .
+```
+
+To run the container, see ```docker_run.sh```
