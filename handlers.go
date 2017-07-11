@@ -36,3 +36,15 @@ func PostWebhook(w http.ResponseWriter, r *http.Request) {
 func GetWebhook(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "GET received")
 }
+
+func LogSocket(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Request to connect logview websocket")
+	c, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Printf("upgrade error: %s", err)
+		return
+	}
+	client := newClient(c)
+	go client.writePump()
+	client.readPump()
+}

@@ -2,8 +2,11 @@ package main
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 	"net/http"
 )
+
+var upgrader = websocket.Upgrader{} // default options
 
 func NewRouter() *mux.Router {
 
@@ -19,6 +22,9 @@ func NewRouter() *mux.Router {
 			Name(route.Name).
 			Handler(handler)
 	}
+
+	// all static goes to /static/ files
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	return router
 }

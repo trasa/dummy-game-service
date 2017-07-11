@@ -31,4 +31,10 @@ var routes = Routes{
 		"/webhook",
 		GetWebhook,
 	},
+	Route{
+		"ViewLog",
+		"GET",
+		"/viewlog",
+		LogSocket,
+	},
 }
