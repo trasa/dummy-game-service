@@ -15,6 +15,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 func PostWebhook(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	log.Printf("Posted Form Data: %v", r.Form)
+	logchan <- fmt.Sprintf("Posted Form Data: %v", r.Form)
 
 	// is this a fail?
 	failValue := r.PostFormValue("fail")
@@ -29,16 +30,20 @@ func PostWebhook(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "forcing an error", responseCode)
 	} else {
 		// otherwise success
-		fmt.Fprintf(w, "POST Received")
+		fmt.Fprintln(w, "POST Received")
 	}
 }
 
 func GetWebhook(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "GET received")
+	fmt.Fprintln(w, "GET received")
+}
+
+func Ping(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "PONG")
+	logchan <- "PONGPONGPONGPONGPONGPONGPONG!"
 }
 
 func LogSocket(w http.ResponseWriter, r *http.Request) {
-	log.Printf("Request to connect logview websocket")
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("upgrade error: %s", err)

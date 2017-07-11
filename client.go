@@ -17,7 +17,6 @@ func newClient(c *websocket.Conn) *Client {
 
 func (c *Client) readPump() {
 	defer func() {
-		log.Println("readPump closing")
 		c.conn.Close()
 	}()
 
@@ -34,14 +33,12 @@ func (c *Client) readPump() {
 
 func (c *Client) writePump() {
 	defer func() {
-		log.Println("writePump closing")
 		c.conn.Close()
 	}()
 
 	for {
 		select {
 		case message := <-logchan:
-			log.Printf("writing %s", message)
 			err := c.conn.WriteMessage(websocket.TextMessage, []byte(message))
 			if err != nil {
 				log.Printf("write error: %s", err)

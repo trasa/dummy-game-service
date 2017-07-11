@@ -6,6 +6,7 @@
         var defaults = {
             foo: 'bar',
             socketUrl: "ws://localhost:8080/viewlog",
+            pingUrl: "http://localhost:8080/ping",
 
             // if your plugin is event-driven, you may provide callback capabilities
             // for its events. execute these functions before or after events of your
@@ -82,6 +83,13 @@
             websocket.close();
         };
 
+        plugin.ping = function() {
+            console.log("ping");
+            $.get(plugin.settings["pingUrl"], function() {
+                console.log("ping sent");
+            })
+        };
+
         plugin.init();
     };
 
@@ -112,7 +120,11 @@
 
                 $('#disconnect').click(function() {
                     mc.forceClose();
-                })
+                });
+
+                $('#ping').click(function() {
+                    mc.ping();
+                });
 
                 function displayMessage(msg) {
                     var display = $('#display');

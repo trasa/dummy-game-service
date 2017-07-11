@@ -37,4 +37,10 @@ var routes = Routes{
 		"/viewlog",
 		LogSocket,
 	},
+	Route{
+		"Ping",
+		"GET",
+		"/ping",
+		Ping,
+	},
 }
