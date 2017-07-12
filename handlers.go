@@ -14,8 +14,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 func PostWebhook(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	log.Printf("Posted Form Data: %v", r.Form)
-	logchan <- fmt.Sprintf("Posted Form Data: %v", r.Form)
+	log.Printf("Posted Form Data:\n %v\n%v", r.Header, r.Form)
+	broadcaster <- fmt.Sprintf("Webhook Form Received:\nHeaders: %v\nForm: %v", r.Header, r.Form)
 
 	// is this a fail?
 	failValue := r.PostFormValue("fail")
@@ -40,7 +40,7 @@ func GetWebhook(w http.ResponseWriter, r *http.Request) {
 
 func Ping(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "PONG")
-	logchan <- "PONGPONGPONGPONGPONGPONGPONG!"
+	broadcaster <- "PONG"
 }
 
 func LogSocket(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +50,7 @@ func LogSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	client := newClient(c)
+	clients.Add(client)
 	go client.writePump()
 	client.readPump()
 }
