@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"io/ioutil"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -14,7 +15,11 @@ func Index(w http.ResponseWriter, r *http.Request) {
 func PostWebhook(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	log.Printf("Posted Form Data:\n %v\n%v", r.Header, r.Form)
-	broadcaster <- fmt.Sprintf("Webhook Form Received:\nHeaders: %v\nForm: %v", r.Header, r.Form)
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error reading form body: %s", err)
+	}
+	broadcaster <- fmt.Sprintf("Webhook Form Received:\nHeaders: %v\nForm: %v\nBody: %s\n", r.Header, r.Form, body)
 
 	// is this a fail?
 	failValue := r.PostFormValue("fail")
