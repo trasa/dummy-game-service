@@ -5,8 +5,13 @@ import (
 	"net/http"
 )
 
+// this tells all clients to terminate
 var globalQuit = make(chan struct{})
+
+// our set of connected clients
 var clients = newClients()
+
+// the channel that gets dispatched to all clients
 var broadcaster = make(chan string, 10)
 
 func main() {
