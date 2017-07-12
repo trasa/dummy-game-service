@@ -2,14 +2,13 @@ package main
 
 import (
 	"fmt"
-	"html"
 	"log"
 	"net/http"
 	"strconv"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "you are at %q", html.EscapeString(r.URL.Path))
+	http.Redirect(w, r, "/static/#", 302)
 }
 
 func PostWebhook(w http.ResponseWriter, r *http.Request) {
