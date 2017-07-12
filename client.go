@@ -31,6 +31,8 @@ func (c *Client) readPump() {
 		err := c.conn.ReadJSON(&body)
 		if err != nil {
 			log.Printf("read error: %s", err)
+			clients.Remove(c)
+			return
 		} else {
 			log.Printf("message body: %s", body)
 		}
@@ -51,6 +53,7 @@ func (c *Client) writePump() {
 			err := c.conn.WriteMessage(websocket.TextMessage, []byte(message))
 			if err != nil {
 				log.Printf("write error: %s", err)
+				clients.Remove(c)
 				return
 			}
 		case <-c.quit:
@@ -85,6 +88,7 @@ func (cs *Clients) Remove(c *Client) {
 func (cs *Clients) Iter(routine func(*Client)) {
 	cs.Lock()
 	defer cs.Unlock()
+	log.Printf("sending to %d clients", len(cs.clients))
 	for c := range cs.clients {
 		routine(c)
 	}
