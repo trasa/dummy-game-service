@@ -5,8 +5,8 @@
 
         var defaults = {
             foo: 'bar',
-            socketUrl: "ws://localhost:8080/viewlog",
-            pingUrl: "http://localhost:8080/ping",
+            socketUrl: "ws://" + window.location.host + ":8080/viewlog",
+            pingUrl: "http://" + window.location.host + " :8080/ping",
 
             // if your plugin is event-driven, you may provide callback capabilities
             // for its events. execute these functions before or after events of your
