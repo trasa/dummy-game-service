@@ -2,19 +2,24 @@ package main
 
 import (
 	"fmt"
-	"html"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "you are at %q", html.EscapeString(r.URL.Path))
+	http.Redirect(w, r, "/static/#", 302)
 }
 
 func PostWebhook(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	log.Printf("Posted Form Data: %v", r.Form)
+	log.Printf("Posted Form Data:\n %v\n%v", r.Header, r.Form)
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error reading form body: %s", err)
+	}
+	broadcaster <- fmt.Sprintf("Webhook Form Received:\nHeaders: %v\nForm: %v\nBody: %s\n", r.Header, r.Form, body)
 
 	// is this a fail?
 	failValue := r.PostFormValue("fail")
@@ -29,10 +34,27 @@ func PostWebhook(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "forcing an error", responseCode)
 	} else {
 		// otherwise success
-		fmt.Fprintf(w, "POST Received")
+		fmt.Fprintln(w, "POST Received")
 	}
 }
 
 func GetWebhook(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "GET received")
+	fmt.Fprintln(w, "GET received")
+}
+
+func Ping(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "PONG")
+	broadcaster <- "PONG"
+}
+
+func LogSocket(w http.ResponseWriter, r *http.Request) {
+	c, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Printf("upgrade error: %s", err)
+		return
+	}
+	client := newClient(c)
+	clients.Add(client)
+	go client.writePump()
+	client.readPump()
 }
