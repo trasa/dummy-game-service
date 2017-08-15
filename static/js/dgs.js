@@ -126,6 +126,13 @@
                     mc.ping();
                 });
 
+                $('#calculateHash').click(function() {
+                    var shaObj = new jsSHA("SHA-256", "TEXT");
+                    shaObj.update($('#secretKey').val());
+                    shaObj.update($('#hook_body').val());
+                    displayMessage("hash is '" + shaObj.getHash("HEX") + "'");
+                });
+
                 function displayMessage(msg) {
                     var display = $('#display');
                     display

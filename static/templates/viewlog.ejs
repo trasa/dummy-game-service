@@ -10,6 +10,14 @@
             <input type='button' class="btn btn-default" id='disconnect' value='disconnect' />
             <input type='button' class="btn btn-default" id='ping' value='ping' />
         </div>
+        <div class="panel-body">
+            <p class="help-block">To verify hash codes, enter your title's secret key and message body.</p>
+            <label>Secret Key</label>
+            <input class="form-control" id="secretKey" value="" />
+            <label>Body</label>
+            <input class="form-control" id="hook_body" value="" />
+            <input type="button" class="btn btn-default" id="calculateHash" value="Calculate hash" />
+        </div>
     </div>
 </div>
 <div class="row" id="game">
@@ -21,3 +29,4 @@
         </div>
     </div>
 </div>
+
