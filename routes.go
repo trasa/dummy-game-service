@@ -73,8 +73,6 @@ func init(){
 			HandlerFunc: Index,
 			RequestParams: []Param{},
 			ResponseParams:	[]Param{
-				Param{"success", true, "boolean"},
-				Param{"result_code", true, "string"},
 			},
 		},
 		Route{
@@ -87,11 +85,13 @@ func init(){
 			HandlerFunc: CallEndpoint,
 			RequestParams:	[]Param{
 				Param{"name", true, "string"},
+				Param{"version", false, "int"},
 				Param{"params", true, "object"},
 			},
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
+				Param{"result_message", false, "string"},
 			},
 		},
 		Route{
@@ -106,6 +106,7 @@ func init(){
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
+				Param{"result_message", false, "string"},
 			},
 		},
 	}
@@ -124,6 +125,7 @@ func init(){
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
+				Param{"result_message", false, "string"},
 				Param{"player_id", true, "int"},
 			},
 		},
@@ -139,6 +141,7 @@ func init(){
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
+				Param{"result_message", false, "string"},
 				Param{"stars", true, "int"},
 			},
 		},
@@ -155,6 +158,7 @@ func init(){
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
+				Param{"result_message", false, "string"},
 				Param{"star", true, "int"},
 			},
 		},
@@ -171,6 +175,7 @@ func init(){
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
+				Param{"result_message", false, "string"},
 				Param{"player", true, "object"},
 			},
 		},
@@ -187,6 +192,7 @@ func init(){
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
+				Param{"result_message", false, "string"},
 				Param{"star", true, "int"},
 			},
 		},
@@ -202,6 +208,7 @@ func init(){
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
+				Param{"result_message", false, "string"},
 				Param{"star", true, "int"},
 			},
 		},
