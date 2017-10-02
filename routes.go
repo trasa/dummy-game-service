@@ -148,7 +148,10 @@ func init(){
 			Description:	"Grants a specified number of stars to the player, and displays current stars.",
 			Version:	1,
 			AdditionalProperties:	true,
-			RequestParams:	[]Param{},
+			RequestParams:	[]Param{
+				Param{"player_id", true, "int"},
+				Param{"stars", true, "int"},
+			},
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
@@ -161,7 +164,10 @@ func init(){
 			Description:	"Grants a specified number of stars to the player, and displays player info.",
 			Version:	2,
 			AdditionalProperties:	true,
-			RequestParams:	[]Param{},
+			RequestParams:	[]Param{
+				Param{"player_id", true, "int"},
+				Param{"stars", true, "int"},
+			},
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
@@ -174,7 +180,10 @@ func init(){
 			Description:	"Removes a specified number of stars from the player.",
 			Version:	1,
 			AdditionalProperties:	true,
-			RequestParams:	[]Param{},
+			RequestParams:	[]Param{
+				Param{"player_id", true, "int"},
+				Param{"stars", true, "int"},
+			},
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
@@ -187,7 +196,9 @@ func init(){
 			Description:	"Removes all stars from the player. GG.",
 			Version:	1,
 			AdditionalProperties:	true,
-			RequestParams:	[]Param{},
+			RequestParams:	[]Param{
+				Param{"player_id", true, "int"},
+			},
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
