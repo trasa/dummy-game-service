@@ -159,7 +159,7 @@ func init(){
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
 				Param{"result_message", false, "string"},
-				Param{"star", true, "int"},
+				Param{"stars", true, "int"},
 			},
 		},
 
@@ -193,7 +193,7 @@ func init(){
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
 				Param{"result_message", false, "string"},
-				Param{"star", true, "int"},
+				Param{"stars", true, "int"},
 			},
 		},
 
@@ -209,7 +209,7 @@ func init(){
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
 				Param{"result_message", false, "string"},
-				Param{"star", true, "int"},
+				Param{"stars", true, "int"},
 			},
 		},
 	}
