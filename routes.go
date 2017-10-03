@@ -85,7 +85,7 @@ func init(){
 			HandlerFunc: CallEndpoint,
 			RequestParams:	[]Param{
 				Param{"name", true, "string"},
-				Param{"version", false, "int"},
+				Param{"version", false, "integer"},
 				Param{"params", true, "object"},
 			},
 			ResponseParams:	[]Param{
@@ -126,7 +126,7 @@ func init(){
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
 				Param{"result_message", false, "string"},
-				Param{"player_id", true, "int"},
+				Param{"player_id", true, "integer"},
 			},
 		},
 
@@ -136,13 +136,13 @@ func init(){
 			Version:	1,
 			AdditionalProperties:	true,
 			RequestParams:	[]Param{
-				Param{"player_id", true, "int"},
+				Param{"player_id", true, "integer"},
 			},
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
 				Param{"result_message", false, "string"},
-				Param{"stars", true, "int"},
+				Param{"stars", true, "integer"},
 			},
 		},
 
@@ -152,14 +152,14 @@ func init(){
 			Version:	1,
 			AdditionalProperties:	true,
 			RequestParams:	[]Param{
-				Param{"player_id", true, "int"},
-				Param{"stars", true, "int"},
+				Param{"player_id", true, "integer"},
+				Param{"stars", true, "integer"},
 			},
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
 				Param{"result_message", false, "string"},
-				Param{"stars", true, "int"},
+				Param{"stars", true, "integer"},
 			},
 		},
 
@@ -169,8 +169,8 @@ func init(){
 			Version:	2,
 			AdditionalProperties:	true,
 			RequestParams:	[]Param{
-				Param{"player_id", true, "int"},
-				Param{"stars", true, "int"},
+				Param{"player_id", true, "integer"},
+				Param{"stars", true, "integer"},
 			},
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
@@ -186,14 +186,14 @@ func init(){
 			Version:	1,
 			AdditionalProperties:	true,
 			RequestParams:	[]Param{
-				Param{"player_id", true, "int"},
-				Param{"stars", true, "int"},
+				Param{"player_id", true, "integer"},
+				Param{"stars", true, "integer"},
 			},
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
 				Param{"result_message", false, "string"},
-				Param{"stars", true, "int"},
+				Param{"stars", true, "integer"},
 			},
 		},
 
@@ -203,13 +203,13 @@ func init(){
 			Version:	1,
 			AdditionalProperties:	true,
 			RequestParams:	[]Param{
-				Param{"player_id", true, "int"},
+				Param{"player_id", true, "integer"},
 			},
 			ResponseParams:	[]Param{
 				Param{"success", true, "boolean"},
 				Param{"result_code", true, "string"},
 				Param{"result_message", false, "string"},
-				Param{"stars", true, "int"},
+				Param{"stars", true, "integer"},
 			},
 		},
 	}

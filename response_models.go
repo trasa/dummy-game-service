@@ -25,7 +25,7 @@ type TypeMap map[string]string
 type PropertyMap map[string]TypeMap
 
 type RequestResponseSchema struct{
-	AdditionalProperties        	bool			            `json:"additional_properties"`
+	AdditionalProperties        	bool			    `json:"additionalProperties"`
 	Required                        []string                    `json:"required"`
 	Type                            string                      `json:"type"`
 	Properties                      PropertyMap                 `json:"properties"`
