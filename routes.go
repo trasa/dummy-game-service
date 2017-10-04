@@ -84,7 +84,7 @@ func init(){
 			AdditionalProperties: true,
 			HandlerFunc: CallEndpoint,
 			RequestParams:	[]Param{
-				Param{"name", true, "string"},
+				Param{"method_name", true, "string"},
 				Param{"version", false, "integer"},
 				Param{"params", true, "object"},
 			},

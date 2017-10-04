@@ -32,7 +32,7 @@ type RequestResponseSchema struct{
 }
 
 type GGMethodSchema struct{
-	Name        string  `json:"name"`
+	Name        string  `json:"method_name"`
 	Description string  `json:"description"`
 	Version     int     `json:"version"`
 
