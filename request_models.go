@@ -1,7 +1,7 @@
 package main
 
 type CallEndpointRequest struct{
-	Name 	string 				`json:"name"`
+	Name 	string 				`json:"method_name"`
 	Version int					`json:"version"`
 	Params 	ParamsStruct	    `json:"params"`
 }
