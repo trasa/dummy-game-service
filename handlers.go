@@ -140,22 +140,56 @@ func ViewEndpoints(w http.ResponseWriter, r *http.Request) {
 
 //	creates a request/response schema populated with passed route and param information
 func CreateRequestResponseSchema(route Route, params []Param) RequestResponseSchema{
-	requestResponseSchema := RequestResponseSchema{
-		AdditionalProperties: 	route.AdditionalProperties,
-		Required:				[]string{},
-		Type:					"object",
-		Properties:				PropertyMap{},
+	schemaRoot := SchemaRoot{
+		SchemaUrl: "http://json-schema.org/draft-04/schema#",
+		Definitions: map[string]string{},
 	}
 
-	for _, parameter := range params{
-		typeMap := TypeMap{"type": parameter.Type}
-		requestResponseSchema.Properties[parameter.Name] = typeMap
-		if parameter.Required == true{
-			requestResponseSchema.Required = append(requestResponseSchema.Required, parameter.Name)
-		}
+	nestedRequiredList, propertyList := ParseParams([]string{}, params)
+
+	schemaBody := SchemaBody{
+		Type: "object",
+		AdditionalProperties: true,
+		Required: nestedRequiredList,
+		Properties: propertyList,
 	}
+
+	requestResponseSchema := RequestResponseSchema{
+		SchemaRoot: schemaRoot,
+		SchemaBody: schemaBody,
+	}
+
+	//for _, parameter := range params{
+	//	if parameter.Required == true{
+	//		requestResponseSchema.Required = append(requestResponseSchema.Required, parameter.Name)
+	//	}
+	//	requestResponseSchema.Properties[parameter.Name] = SchemaBody{
+	//		Type: parameter.Type,
+	//		AdditionalProperties: true,
+	//
+	//	}
+	//
+	//}
 
 	return requestResponseSchema
+}
+
+func ParseParams(requiredList []string, params []Param) ([]string, PropertyMap){
+	propertyList := PropertyMap{}
+	for _, parameter := range params{
+		if parameter.Required == true{
+			requiredList = append(requiredList, parameter.Name)
+		}
+
+		nestedRequiredList, nestedProperties := ParseParams([]string{}, parameter.Content)
+		schemaBody := SchemaBody{
+			Type: parameter.Type,
+			Required: nestedRequiredList,
+			Properties: nestedProperties,
+		}
+		propertyList[parameter.Name] = schemaBody
+	}
+	return requiredList, propertyList
 }
 
 //	creates a new player and increments the global index
@@ -166,9 +200,11 @@ func CreatePlayer(w http.ResponseWriter) {
 	players = append(players, newPlayer)
 
 	apiResponse := ApiResponse{Success: true, ResultCode: "OK"}
-	response := CreatePlayerResponse{
-		apiResponse,
-		newPlayer.Id,
+	response := GenericResponse{
+		ApiResponse: apiResponse,
+		Properties: Properties{
+			Player: &newPlayer,
+		},
 	}
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		log.Printf("Error while creating player: %s", err)
@@ -236,9 +272,11 @@ func AddStarsV2(w http.ResponseWriter, params ParamsStruct){
 //	sends a generic `OK` response along with player information
 func SendSuccessPlayerStatusResponse(w http.ResponseWriter, playerPtr *Player){
 	apiResponse := ApiResponse{Success: true, ResultCode: "OK"}
-	response := PlayerStatusResponse{
-		apiResponse,
-		(*playerPtr),
+	response := GenericResponse{
+		ApiResponse: apiResponse,
+		Properties: Properties{
+			Player: &(*playerPtr),
+		},
 	}
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		log.Printf("Error while serializing response: %s", err)
@@ -248,9 +286,11 @@ func SendSuccessPlayerStatusResponse(w http.ResponseWriter, playerPtr *Player){
 //	sends a generic `OK` response along with player information
 func SendSuccessGetStarsResponse(w http.ResponseWriter, playerPtr *Player){
 	apiResponse := ApiResponse{Success: true, ResultCode: "OK"}
-	response := GetStarsResponse{
-		apiResponse,
-		(*playerPtr).Stars,
+	response := GenericResponse{
+		ApiResponse: apiResponse,
+		Properties: Properties{
+			Stars: &((*playerPtr).Stars),
+		},
 	}
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		log.Printf("Error while serializing response: %s", err)

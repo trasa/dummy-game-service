@@ -1,8 +1,8 @@
 package main
 
 type Player struct {
-	Id        	int				`json:"id"`
-	Stars      	int				`json:"stars"`
+	Id        	int				`json:"id,omitempty"`
+	Stars      	int				`json:"stars,omitempty"`
 }
 
 type Players []Player

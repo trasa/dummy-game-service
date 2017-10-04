@@ -8,6 +8,7 @@ type Param struct{
 	Name 		string
 	Required 	bool
 	Type		string
+	Content		[]Param
 }
 
 type ResponseParam struct{
@@ -84,14 +85,15 @@ func init(){
 			AdditionalProperties: true,
 			HandlerFunc: CallEndpoint,
 			RequestParams:	[]Param{
-				Param{"method_name", true, "string"},
-				Param{"version", false, "integer"},
-				Param{"params", true, "object"},
+				Param{"method_name", true, "string", nil},
+				Param{"version", false, "integer", nil},
+				Param{"params", true, "object", nil},
 			},
 			ResponseParams:	[]Param{
-				Param{"success", true, "boolean"},
-				Param{"result_code", true, "string"},
-				Param{"result_message", false, "string"},
+				Param{"success", true, "boolean", nil},
+				Param{"result_code", true, "string", nil},
+				Param{"result_message", false, "string", nil},
+				Param{"properties", true, "object", nil},
 			},
 		},
 		Route{
@@ -104,9 +106,9 @@ func init(){
 			HandlerFunc: ViewEndpoints,
 			RequestParams:	[]Param{},
 			ResponseParams:	[]Param{
-				Param{"success", true, "boolean"},
-				Param{"result_code", true, "string"},
-				Param{"result_message", false, "string"},
+				Param{"success", true, "boolean", nil},
+				Param{"result_code", true, "string", nil},
+				Param{"result_message", false, "string", nil},
 			},
 		},
 	}
@@ -123,10 +125,13 @@ func init(){
 
 			},
 			ResponseParams:	[]Param{
-				Param{"success", true, "boolean"},
-				Param{"result_code", true, "string"},
-				Param{"result_message", false, "string"},
-				Param{"player_id", true, "integer"},
+				Param{"success", true, "boolean", nil},
+				Param{"result_code", true, "string", nil},
+				Param{"result_message", false, "string", nil},
+				Param{"properties", true, "object", []Param{
+						Param{"player_id", true, "integer", nil},
+					},
+				},
 			},
 		},
 
@@ -136,13 +141,18 @@ func init(){
 			Version:	1,
 			AdditionalProperties:	true,
 			RequestParams:	[]Param{
-				Param{"player_id", true, "integer"},
+				Param{"player_id", true, "integer", nil},
 			},
 			ResponseParams:	[]Param{
-				Param{"success", true, "boolean"},
-				Param{"result_code", true, "string"},
-				Param{"result_message", false, "string"},
-				Param{"stars", true, "integer"},
+				Param{"success", true, "boolean", nil},
+				Param{"result_code", true, "string", nil},
+				Param{"result_message", false, "string", nil},
+				Param{"properties", true, "object",
+					[]Param{
+						Param{"stars", true, "integer", nil},
+					},
+				},
+
 			},
 		},
 
@@ -152,14 +162,18 @@ func init(){
 			Version:	1,
 			AdditionalProperties:	true,
 			RequestParams:	[]Param{
-				Param{"player_id", true, "integer"},
-				Param{"stars", true, "integer"},
+				Param{"player_id", true, "integer", nil},
+				Param{"stars", true, "integer", nil},
 			},
 			ResponseParams:	[]Param{
-				Param{"success", true, "boolean"},
-				Param{"result_code", true, "string"},
-				Param{"result_message", false, "string"},
-				Param{"stars", true, "integer"},
+				Param{"success", true, "boolean", nil},
+				Param{"result_code", true, "string", nil},
+				Param{"result_message", false, "string", nil},
+				Param{"properties", true, "object",
+					[]Param{
+						Param{"stars", true, "integer", nil},
+					},
+				},
 			},
 		},
 
@@ -169,14 +183,21 @@ func init(){
 			Version:	2,
 			AdditionalProperties:	true,
 			RequestParams:	[]Param{
-				Param{"player_id", true, "integer"},
-				Param{"stars", true, "integer"},
+				Param{"player_id", true, "integer", nil},
+				Param{"stars", true, "integer", nil},
 			},
 			ResponseParams:	[]Param{
-				Param{"success", true, "boolean"},
-				Param{"result_code", true, "string"},
-				Param{"result_message", false, "string"},
-				Param{"player", true, "object"},
+				Param{"success", true, "boolean", nil},
+				Param{"result_code", true, "string", nil},
+				Param{"result_message", false, "string", nil},
+				Param{"properties", true, "object",
+					[]Param{
+						Param{"player", true, "object", []Param{
+							Param{"stars", true, "integer", nil},
+							Param{"id", true, "integer", nil},
+						},},
+					},
+				},
 			},
 		},
 
@@ -186,14 +207,18 @@ func init(){
 			Version:	1,
 			AdditionalProperties:	true,
 			RequestParams:	[]Param{
-				Param{"player_id", true, "integer"},
-				Param{"stars", true, "integer"},
+				Param{"player_id", true, "integer", nil},
+				Param{"stars", true, "integer", nil},
 			},
 			ResponseParams:	[]Param{
-				Param{"success", true, "boolean"},
-				Param{"result_code", true, "string"},
-				Param{"result_message", false, "string"},
-				Param{"stars", true, "integer"},
+				Param{"success", true, "boolean", nil},
+				Param{"result_code", true, "string", nil},
+				Param{"result_message", false, "string", nil},
+				Param{"properties", true, "object",
+					[]Param{
+						Param{"stars", true, "integer", nil},
+					},
+				},
 			},
 		},
 
@@ -203,13 +228,17 @@ func init(){
 			Version:	1,
 			AdditionalProperties:	true,
 			RequestParams:	[]Param{
-				Param{"player_id", true, "integer"},
+				Param{"player_id", true, "integer", nil},
 			},
 			ResponseParams:	[]Param{
-				Param{"success", true, "boolean"},
-				Param{"result_code", true, "string"},
-				Param{"result_message", false, "string"},
-				Param{"stars", true, "integer"},
+				Param{"success", true, "boolean", nil},
+				Param{"result_code", true, "string", nil},
+				Param{"result_message", false, "string", nil},
+				Param{"properties", true, "object",
+					[]Param{
+						Param{"stars", true, "integer", nil},
+					},
+				},
 			},
 		},
 	}
