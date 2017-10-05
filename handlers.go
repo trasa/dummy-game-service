@@ -1,9 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"encoding/json"
 	"log"
 	"net/http"
 	"strconv"
@@ -61,13 +61,13 @@ func LogSocket(w http.ResponseWriter, r *http.Request) {
 }
 
 //	calls the endpoint with associated params, specified inside the body
-func CallEndpoint(w http.ResponseWriter, r *http.Request){
+func CallEndpoint(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 
 	functionName, reqVersion, params, err := ParseRequest(w, r)
 	if err != nil {
-		SendErrorResponse(w, "Deserialization error while parsing input.")
+		SendErrorResponse(w, "", "Deserialization error while parsing input.")
 		log.Printf("Deserialization error while parsing input: %s", err)
 		return
 	}
@@ -77,21 +77,21 @@ func CallEndpoint(w http.ResponseWriter, r *http.Request){
 	case "getstars":
 		GetStars(w, params.PlayerId)
 	case "addstars":
-		if reqVersion == 2{
+		if reqVersion == 2 {
 			//	only difference is that "player":{"id":..., "stars":...} gets displayed instead of just "stars":...
 			AddStarsV2(w, params)
-		}	else	{
+		} else {
 			AlterStars(w, params, false)
 		}
 	case "subtractstars":
-		params.Stars = params.Stars*(-1)
+		params.Stars = params.Stars * (-1)
 		AlterStars(w, params, false)
 	case "wipestars":
 		AlterStars(w, params, true)
 	default:
 		response := ApiResponse{
-			Success: false,
-			ResultCode: "ERROR",
+			Success:       false,
+			ResultCode:    "ERROR",
 			ResultMessage: fmt.Sprint("Unrecognized method call: ", functionName),
 		}
 		if err := json.NewEncoder(w).Encode(response); err != nil {
@@ -103,7 +103,7 @@ func CallEndpoint(w http.ResponseWriter, r *http.Request){
 
 //	returns the `name` and `params` fields out of passed request
 //	if error encountered during deserialization, sends back error.
-func ParseRequest(w http.ResponseWriter, r *http.Request) (string, int, ParamsStruct, error){
+func ParseRequest(w http.ResponseWriter, r *http.Request) (string, int, ParamsStruct, error) {
 	decoder := json.NewDecoder(r.Body)
 	var t CallEndpointRequest
 	err := decoder.Decode(&t)
@@ -116,17 +116,17 @@ func ViewEndpoints(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	response := DiscoveryResponse{
-		ApiResponse:	ApiResponse{Success: true, ResultCode: "OK"},
-		Methods:		[]GGMethodSchema{},
+		ApiResponse: ApiResponse{Success: true, ResultCode: "OK"},
+		Methods:     []GGMethodSchema{},
 	}
 
-	for _, route := range internalRoutes{
+	for _, route := range internalRoutes {
 		ggMethodSchema := GGMethodSchema{
-			Name:			route.Name,
-			Description:	route.Description,
-			Version:		route.Version,
-			RequestSchema:	CreateRequestResponseSchema(route, route.RequestParams),
-			ResponseSchema:	CreateRequestResponseSchema(route, route.ResponseParams),
+			Name:           route.Name,
+			Description:    route.Description,
+			Version:        route.Version,
+			RequestSchema:  CreateRequestResponseSchema(route, route.RequestParams),
+			ResponseSchema: CreateRequestResponseSchema(route, route.ResponseParams),
 		}
 
 		response.Methods = append(response.Methods, ggMethodSchema)
@@ -139,19 +139,19 @@ func ViewEndpoints(w http.ResponseWriter, r *http.Request) {
 }
 
 //	creates a request/response schema populated with passed route and param information
-func CreateRequestResponseSchema(route Route, params []Param) RequestResponseSchema{
+func CreateRequestResponseSchema(route Route, params []Param) RequestResponseSchema {
 	schemaRoot := SchemaRoot{
-		SchemaUrl: "http://json-schema.org/draft-04/schema#",
+		SchemaUrl:   "http://json-schema.org/draft-04/schema#",
 		Definitions: map[string]string{},
 	}
 
 	nestedRequiredList, propertyList := ParseParams([]string{}, params)
 
 	schemaBody := SchemaBody{
-		Type: "object",
+		Type:                 "object",
 		AdditionalProperties: true,
-		Required: nestedRequiredList,
-		Properties: propertyList,
+		Required:             nestedRequiredList,
+		Properties:           propertyList,
 	}
 
 	requestResponseSchema := RequestResponseSchema{
@@ -174,17 +174,17 @@ func CreateRequestResponseSchema(route Route, params []Param) RequestResponseSch
 	return requestResponseSchema
 }
 
-func ParseParams(requiredList []string, params []Param) ([]string, PropertyMap){
+func ParseParams(requiredList []string, params []Param) ([]string, PropertyMap) {
 	propertyList := PropertyMap{}
-	for _, parameter := range params{
-		if parameter.Required == true{
+	for _, parameter := range params {
+		if parameter.Required == true {
 			requiredList = append(requiredList, parameter.Name)
 		}
 
 		nestedRequiredList, nestedProperties := ParseParams([]string{}, parameter.Content)
 		schemaBody := SchemaBody{
-			Type: parameter.Type,
-			Required: nestedRequiredList,
+			Type:       parameter.Type,
+			Required:   nestedRequiredList,
 			Properties: nestedProperties,
 		}
 		propertyList[parameter.Name] = schemaBody
@@ -195,7 +195,7 @@ func ParseParams(requiredList []string, params []Param) ([]string, PropertyMap){
 //	creates a new player and increments the global index
 func CreatePlayer(w http.ResponseWriter) {
 
-	playerIndex+=1
+	playerIndex += 1
 	newPlayer := Player{playerIndex, 0}
 	players = append(players, newPlayer)
 
@@ -212,27 +212,27 @@ func CreatePlayer(w http.ResponseWriter) {
 }
 
 //	returns response with number of stars belonging to specified player
-func GetStars(w http.ResponseWriter, playerId int){
+func GetStars(w http.ResponseWriter, playerId int) {
 	//	validate input
 	if playerId <= 0 {
-		SendErrorResponse(w, fmt.Sprint("Illegal value for 'player_id': ", playerId))
+		SendErrorResponse(w, "BAD_PLAYER_ID", fmt.Sprint("Illegal value for 'player_id': ", playerId))
 		return
 	}
 
 	playerPtr := FindPlayerById(playerId)
 	if playerPtr != nil {
 		SendSuccessGetStarsResponse(w, playerPtr)
-	}	else	{
-		SendErrorResponse(w, fmt.Sprint("Unable to find player with id: ", playerId))
+	} else {
+		SendErrorResponse(w, "PLAYER_NOT_FOUND", fmt.Sprint("Unable to find player with id: ", playerId))
 	}
 }
 
 //	alters a player's star count by adding the stars in the ParamsStruct to them (could be a negative number)
 //	 or wiping them to zero, based on the bool.
-func AlterStars(w http.ResponseWriter, params ParamsStruct, doWipe bool){
+func AlterStars(w http.ResponseWriter, params ParamsStruct, doWipe bool) {
 	//	validate input
 	if params.PlayerId <= 0 {
-		SendErrorResponse(w, fmt.Sprint("Illegal value for 'player_id': ", params.PlayerId))
+		SendErrorResponse(w, "BAD_PLAYER_ID", fmt.Sprint("Illegal value for 'player_id': ", params.PlayerId))
 		return
 	}
 	playerPtr := FindPlayerById(params.PlayerId)
@@ -241,21 +241,21 @@ func AlterStars(w http.ResponseWriter, params ParamsStruct, doWipe bool){
 
 		(*playerPtr).Stars += params.Stars
 		//	if balance dips below or wipe requested, set to zero.
-		if (doWipe == true) || ((*playerPtr).Stars < 0){
+		if (doWipe == true) || ((*playerPtr).Stars < 0) {
 			(*playerPtr).Stars = 0
 		}
 
 		SendSuccessGetStarsResponse(w, playerPtr)
-	}	else	{
-		SendErrorResponse(w, fmt.Sprint("Unable to find player with id: ", params.PlayerId))
+	} else {
+		SendErrorResponse(w, "PLAYER_NOT_FOUND", fmt.Sprint("Unable to find player with id: ", params.PlayerId))
 	}
 }
 
 //
-func AddStarsV2(w http.ResponseWriter, params ParamsStruct){
+func AddStarsV2(w http.ResponseWriter, params ParamsStruct) {
 	//	validate input
 	if params.PlayerId <= 0 {
-		SendErrorResponse(w, fmt.Sprint("Illegal value for 'player_id': ", params.PlayerId))
+		SendErrorResponse(w, "BAD_PLAYER_ID", fmt.Sprint("Illegal value for 'player_id': ", params.PlayerId))
 		return
 	}
 
@@ -264,13 +264,13 @@ func AddStarsV2(w http.ResponseWriter, params ParamsStruct){
 	if playerPtr != nil {
 		(*playerPtr).Stars += params.Stars
 		SendSuccessPlayerStatusResponse(w, playerPtr)
-	}	else	{
-		SendErrorResponse(w, fmt.Sprint("Unable to find player with id: ", params.PlayerId))
+	} else {
+		SendErrorResponse(w, "PLAYER_NOT_FOUND", fmt.Sprint("Unable to find player with id: ", params.PlayerId))
 	}
 }
 
 //	sends a generic `OK` response along with player information
-func SendSuccessPlayerStatusResponse(w http.ResponseWriter, playerPtr *Player){
+func SendSuccessPlayerStatusResponse(w http.ResponseWriter, playerPtr *Player) {
 	apiResponse := ApiResponse{Success: true, ResultCode: "OK"}
 	response := GenericResponse{
 		ApiResponse: apiResponse,
@@ -284,7 +284,7 @@ func SendSuccessPlayerStatusResponse(w http.ResponseWriter, playerPtr *Player){
 }
 
 //	sends a generic `OK` response along with player information
-func SendSuccessGetStarsResponse(w http.ResponseWriter, playerPtr *Player){
+func SendSuccessGetStarsResponse(w http.ResponseWriter, playerPtr *Player) {
 	apiResponse := ApiResponse{Success: true, ResultCode: "OK"}
 	response := GenericResponse{
 		ApiResponse: apiResponse,
@@ -298,11 +298,14 @@ func SendSuccessGetStarsResponse(w http.ResponseWriter, playerPtr *Player){
 }
 
 //	sends generic ERROR response
-func SendErrorResponse(w http.ResponseWriter, message string){
+func SendErrorResponse(w http.ResponseWriter, resultCode string, message string) {
+	if resultCode == "" {
+		resultCode = "ERROR"
+	}
 	//	TODO: note source of error prior to calling function
 	apiResponse := ApiResponse{
-		Success: false,
-		ResultCode: "ERROR",
+		Success:       false,
+		ResultCode:    resultCode,
 		ResultMessage: message,
 	}
 	if err := json.NewEncoder(w).Encode(apiResponse); err != nil {
@@ -312,17 +315,17 @@ func SendErrorResponse(w http.ResponseWriter, message string){
 
 //	return max of two numbers
 func Max(a, b int) int {
-	if a > b{
+	if a > b {
 		return a
 	}
 	return b
 }
 
 //	look for player with specified id inside global `players` list
-func FindPlayerById(playerId int) *Player{
+func FindPlayerById(playerId int) *Player {
 	var ptr *Player
-	for i, player := range players{
-		if player.Id == playerId{
+	for i, player := range players {
+		if player.Id == playerId {
 			ptr = &players[i]
 			break
 		}
@@ -331,7 +334,7 @@ func FindPlayerById(playerId int) *Player{
 }
 
 //	attempt to extract `playerId` and `stars` from incoming request
-func ExtractParamsFromBody(r *http.Request) (int, int){
+func ExtractParamsFromBody(r *http.Request) (int, int) {
 	decoder := json.NewDecoder(r.Body)
 	var t CallEndpointRequest
 	err := decoder.Decode(&t)
