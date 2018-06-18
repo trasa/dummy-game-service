@@ -1,5 +1,4 @@
 FROM golang:1.9
-MAINTAINER Tony Rasa <t_rasa@wargaming.net>
 
 WORKDIR /go/src/app
 
