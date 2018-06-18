@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker build -t registry.wargaming.net/freya/dummy-game-service .
+docker build -t yourregistryhere.com/yourprojecthere/dummy-game-service .
 
