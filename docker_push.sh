@@ -1,5 +1,5 @@
 #!/bin/bash
 
-docker tag  registry.wargaming.net/freya/dummy-game-service wgplatform/dummy-game-service
-docker push wgplatform/dummy-game-service 
+docker tag  yourregistryhere.com/yourprojecthere/dummy-game-service yourproject/dummy-game-service
+docker push yourproject/dummy-game-service 
 
